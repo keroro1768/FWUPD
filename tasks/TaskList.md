@@ -51,7 +51,7 @@
 
 ### F002 — FWUPD Plugin 開發實作
 
-**狀態：** 🔄 進行中
+**狀態：** 🔄 進行中（待修復 Critical 問題）
 **起始：** 2026-03-30
 **負責：** 🐱 Giroro
 **目標：** 實作完整的 FWUPD Plugin（company-i2c-hid）
@@ -60,9 +60,19 @@
 
 **進度：**
 - [x] Task.md 建立
-- [ ] Plugin 原始碼實作
-- [ ] Dororo 驗證
+- [x] Plugin 原始碼實作（Giroro）
+- [x] Dororo 驗證（發現 Critical/High 問題）
+- [ ] 修正 Critical 問題
+- [ ] 重新驗證
 - [ ] Commit + Push
+
+**Dororo 驗證發現的問題（P0/P1）：**
+| 優先 | 問題 | 狀態 |
+|------|------|------|
+| P0 | HID 通信未實作 | ⚠️ 待修復 |
+| P0 | Plugin 缺少 udev 子系統註冊 | ⚠️ 待修復 |
+| P1 | Device 基類選擇錯誤 | ⚠️ 待修復 |
+| P1 | Device 生命週期鉤子位置錯誤 | ⚠️ 待修復 |
 
 ---
 
