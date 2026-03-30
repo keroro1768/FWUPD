@@ -232,6 +232,7 @@ To add new commands, edit:
 - This is a **Phase 1** implementation using i2c-stub
 - The device is **passive** - the host must initiate all communication
 - Real interrupt-driven behavior is not fully simulated
+- **Command handling limitation:** Since i2c-stub simulates a passive EEPROM, the daemon cannot receive HID commands (RESET/SET_REPORT/GET_REPORT) from the i2c-hid kernel driver. This design is **only suitable for testing FWUPD Plugin enumeration**. For full command handling, a **Phase 2 kernel module** is required.
 - For full HID over I2C compliance, a **Phase 2 kernel module** is recommended
 
 ## References

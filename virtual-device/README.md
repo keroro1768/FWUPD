@@ -160,6 +160,11 @@ sudo ./test-plugin.sh
 - 真正的中斷驅動行為尚未完全模擬
 - 適用於離線測試 FWUPD Plugin
 
+**命令處理限制（Phase 1）：**
+- 由於 i2c-stub 為被動 EEPROM 模擬，daemon 無法接收 i2c-hid kernel driver 發送的 HID 命令（RESET/SET_REPORT/GET_REPORT 等）
+- 此設計**僅適用於驗證 FWUPD Plugin 的枚舉流程**
+- 如需完整命令處理，需升級至 Phase 2（Kernel Module + I2C Slave API）
+
 **Phase 2 (Kernel Module)**（後期規劃）：
 - 使用 Linux I2C Slave API
 - 真正的 I2C slave 驅動程式

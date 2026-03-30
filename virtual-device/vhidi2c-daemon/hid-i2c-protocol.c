@@ -51,24 +51,23 @@ static const struct i2c_hid_desc vhid_descriptor = {
     .wVendorID          = cpu_to_le16(0x1234),    /* Virtual vendor ID */
     .wProductID         = cpu_to_le16(0x5678),   /* Virtual product ID */
     .wVersionID         = cpu_to_le16(0x0001),    /* Version 0.0.1 */
-    .reserved           = 0,
+    .reserved           = cpu_to_le32(0),
 };
 
-/* Utility: Convert CPU endian to little-endian */
+/* Utility: Convert CPU endian to little-endian
+ * Extracts bytes from memory representation to ensure correct LE output
+ * regardless of platform endianness. */
 uint16_t cpu_to_le16(uint16_t val)
 {
-    uint8_t b0 = val & 0xFF;
-    uint8_t b1 = (val >> 8) & 0xFF;
-    return ((uint16_t)b1) | ((uint16_t)b0 << 8);
+    uint8_t *p = (uint8_t *)&val;
+    return ((uint16_t)p[0]) | ((uint16_t)p[1] << 8);
 }
 
 uint32_t cpu_to_le32(uint32_t val)
 {
-    uint8_t b0 = val & 0xFF;
-    uint8_t b1 = (val >> 8) & 0xFF;
-    uint8_t b2 = (val >> 16) & 0xFF;
-    uint8_t b3 = (val >> 24) & 0xFF;
-    return ((uint32_t)b3) | ((uint32_t)b2 << 8) | ((uint32_t)b1 << 16) | ((uint32_t)b0 << 24);
+    uint8_t *p = (uint8_t *)&val;
+    return ((uint32_t)p[0]) | ((uint32_t)p[1] << 8) |
+           ((uint32_t)p[2] << 16) | ((uint32_t)p[3] << 24);
 }
 
 /**
