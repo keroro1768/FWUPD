@@ -28,7 +28,7 @@ G_DECLARE_FINAL_TYPE(FuCompanyI2cHidFirmware,
 #define FU_COMPANY_I2C_HID_FIRMWARE_HEADER_SIZE 16
 #define FU_COMPANY_I2C_HID_FIRMWARE_VERSION_OFFSET 4
 #define FU_COMPANY_I2C_HID_FIRMWARE_SIZE_OFFSET 8
-#define FU_COMPANY_I2C_HID_FIRMWARE_checksum_OFFSET 12
+#define FU_COMPANY_I2C_HID_FIRMWARE_CHECKSUM_OFFSET 12
 
 /* Helper function to create firmware object */
 FuCompanyI2cHidFirmware *fu_company_i2c_hid_firmware_new(void);

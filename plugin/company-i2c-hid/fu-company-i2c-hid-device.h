@@ -40,15 +40,15 @@ struct _FuCompanyI2cHidDevice {
   gboolean i2c_mode_available; /* I2C interface available */
 };
 
-/* Quirks keys */
-#define FU_COMPANY_I2C_HID_QUIRK_I2C_ADDR        "I2cSlaveAddress"
+/* Quirks keys (following elantp naming convention) */
+#define FU_COMPANY_I2C_HID_QUIRK_I2C_ADDR        "CompanyI2cHidI2cAddress"
 #define FU_COMPANY_I2C_HID_QUIRK_IC_TYPE        "CompanyI2cHidIcType"
 #define FU_COMPANY_I2C_HID_QUIRK_MODULE_ID      "CompanyI2cHidModuleId"
 #define FU_COMPANY_I2C_HID_QUIRK_IAP_PASSWORD   "CompanyI2cHidIapPassword"
 #define FU_COMPANY_I2C_HID_QUIRK_PAGE_COUNT      "CompanyI2cHidPageCount"
 #define FU_COMPANY_I2C_HID_QUIRK_BLOCK_SIZE     "CompanyI2cHidBlockSize"
 #define FU_COMPANY_I2C_HID_QUIRK_BOARD_NAME     "CompanyI2cHidBoardName"
-#define FU_COMPANY_I2C_HID_QUIRK_DRIVER         "QuirkCompanyI2cHidDriver"
+#define FU_COMPANY_I2C_HID_QUIRK_DRIVER         "CompanyI2cHidDriver"
 
 /* Driver types for quirk matching */
 #define FU_COMPANY_I2C_HID_DRIVER_HID           "HID"

@@ -129,21 +129,34 @@ fu_company_i2c_hid_plugin_init(FuCompanyI2cHidPlugin *self)
   /* Initialize default values */
   priv->i2c_mode_available = FALSE;
   priv->i2c_slave_addr = FU_COMPANY_I2C_HID_I2C_ADDR_DEFAULT;
-
-  fu_plugin_add_device_gtype(plugin_class, FU_TYPE_COMPANY_I2C_HID_DEVICE);
 }
 
 static void
 fu_company_i2c_hid_plugin_constructed(GObject *obj)
 {
-  FuCompanyI2cHidPlugin *self = FU_COMPANY_I2C_HID_PLUGIN(obj);
   FuPlugin *plugin = FU_PLUGIN(obj);
+  FuContext *ctx = fu_plugin_get_context(plugin);
 
   /* Chain up */
   G_OBJECT_CLASS(fu_company_i2c_hid_plugin_parent_class)->constructed(obj);
 
-  /* Signal that we support both HID and I2C modes */
-  fu_plugin_set_name(plugin_class, "company-i2c-hid");
+  /* Register quirk keys */
+  fu_context_add_quirk_key(ctx, FU_COMPANY_I2C_HID_QUIRK_I2C_ADDR);
+  fu_context_add_quirk_key(ctx, FU_COMPANY_I2C_HID_QUIRK_IC_TYPE);
+  fu_context_add_quirk_key(ctx, FU_COMPANY_I2C_HID_QUIRK_MODULE_ID);
+  fu_context_add_quirk_key(ctx, FU_COMPANY_I2C_HID_QUIRK_IAP_PASSWORD);
+  fu_context_add_quirk_key(ctx, FU_COMPANY_I2C_HID_QUIRK_PAGE_COUNT);
+  fu_context_add_quirk_key(ctx, FU_COMPANY_I2C_HID_QUIRK_BLOCK_SIZE);
+  fu_context_add_quirk_key(ctx, FU_COMPANY_I2C_HID_QUIRK_BOARD_NAME);
+  fu_context_add_quirk_key(ctx, FU_COMPANY_I2C_HID_QUIRK_DRIVER);
+
+  /* Register udev subsystems for device enumeration */
+  fu_plugin_add_udev_subsystem(plugin, "hidraw");
+  fu_plugin_add_udev_subsystem(plugin, "i2c-dev");
+
+  /* Register firmware and device types */
+  fu_plugin_add_firmware_gtype(plugin, FU_TYPE_COMPANY_I2C_HID_FIRMWARE);
+  fu_plugin_add_device_gtype(plugin, FU_TYPE_COMPANY_I2C_HID_DEVICE);
 }
 
 static void

@@ -139,7 +139,7 @@ fu_company_i2c_hid_firmware_parse(FuFirmware *firmware,
   magic = fu_common_read_uint32(&fw_data[offset + 0], G_BIG_ENDIAN);
   version = fu_common_read_uint32(&fw_data[offset + FU_COMPANY_I2C_HID_FIRMWARE_VERSION_OFFSET], G_BIG_ENDIAN);
   size = fu_common_read_uint32(&fw_data[offset + FU_COMPANY_I2C_HID_FIRMWARE_SIZE_OFFSET], G_BIG_ENDIAN);
-  checksum = fu_common_read_uint32(&fw_data[offset + FU_COMPANY_I2C_HID_FIRMWARE_checksum_OFFSET], G_BIG_ENDIAN);
+  checksum = fu_common_read_uint32(&fw_data[offset + FU_COMPANY_I2C_HID_FIRMWARE_CHECKSUM_OFFSET], G_BIG_ENDIAN);
 
   /* Verify magic number */
   if (magic != FU_COMPANY_I2C_HID_FIRMWARE_MAGIC) {
