@@ -1,0 +1,239 @@
+================================================================================
+  FWUPD Plugin Virtual HID over I2C Device - Expected Output
+================================================================================
+
+This file documents the expected output when running the virtual HID device
+setup and testing scripts.
+
+--------------------------------------------------------------------------------
+1. i2c-stub Setup (setup.sh)
+--------------------------------------------------------------------------------
+
+$ sudo ./setup.sh
+
+========================================
+  i2c-stub Setup Script
+========================================
+
+[INFO] Loading kernel modules...
+[INFO]   Loading i2c-dev...
+[INFO]   i2c-dev loaded successfully
+[INFO]   Loading i2c-stub with chip_addr=0x2A...
+[INFO]   i2c-stub loaded successfully at 0x2A
+[INFO] Verifying I2C devices...
+[INFO]   /dev/i2c-0 exists
+[INFO]   i2c-0 name: i2c-stub ((driver unset))
+[INFO] Setting device permissions...
+[INFO]   Permissions set on /dev/i2c-0
+[INFO] Testing I2C access...
+[INFO]   Available I2C buses:
+[INFO]   Scanning for device at 0x2A...
+
+========================================
+  i2c-stub Setup Complete!
+========================================
+
+Device: /dev/i2c-0
+Slave Address: 0x2A
+
+Next steps:
+  1. Build the daemon:
+       cd ../vhidi2c-daemon
+       make
+
+  2. Run the daemon:
+       sudo ./vhidi2c-daemon -a 0x2A -b 0
+
+  3. Test with i2c-tools:
+       sudo i2cget -y 0 0x2A 0x00 w
+
+--------------------------------------------------------------------------------
+2. Daemon Build (make)
+--------------------------------------------------------------------------------
+
+$ cd ../vhidi2c-daemon && make
+gcc -Wall -Wextra -Werror -pedantic -std=c11 -D_XOPEN_SOURCE=700 -g -O0 -DDEBUG -o vhidi2c-daemon-debug vhidi2c-daemon.c hid-i2c-protocol.c -li2c
+gcc -Wall -Wextra -Werror -pedantic -std=c11 -D_XOPEN_SOURCE=700 -O2 -DNDEBUG -o vhidi2c-daemon vhidi2c-daemon.c hid-i2c-protocol.c -li2c
+Debug build complete: vhidi2c-daemon-debug
+Run with: ./vhidi2c-daemon-debug -d
+
+Release build complete: vhidi2c-daemon
+Run with: ./vhidi2c-daemon
+
+--------------------------------------------------------------------------------
+3. Daemon Execution (vhidi2c-daemon)
+--------------------------------------------------------------------------------
+
+$ sudo ./vhidi2c-daemon
+
+========================================
+  Virtual HID over I2C Daemon (vhidi2c)
+========================================
+
+Virtual HID over I2C Device v0.0.1
+  - Based on HID over I2C Specification 1.11
+  - Uses Linux i2c-stub
+  - Simulates a minimal keyboard HID device
+  - For FWUPD Plugin testing
+
+[VHID-I2C INFO] Device initialized: adapter=0, addr=0x2A
+[VHID-I2C INFO] Connected to I2C bus, slave address 0x2A
+[VHID-I2C INFO] Writing 30-byte HID descriptor to device
+[VHID-I2C INFO] HID Descriptor programmed:
+[VHID-I2C INFO]   - Length: 30 bytes
+[VHID-I2C INFO]   - Version: 1.11
+[VHID-I2C INFO]   - Report Desc Length: 63 bytes
+[VHID-I2C INFO]   - Vendor ID: 0x1234
+[VHID-I2C INFO]   - Product ID: 0x5678
+[VHID-I2C INFO] Writing 63-byte HID report descriptor
+[VHID-I2C INFO] HID Report Descriptor programmed (63 bytes)
+
+========================================
+  Daemon is running
+========================================
+I2C Bus:     /dev/i2c-0
+Slave Addr:  0x2A
+
+The virtual HID device is now ready.
+Host can enumerate and communicate with it.
+
+Press Ctrl+C to stop.
+
+(... heartbeat every 10 seconds ...)
+[VHID-I2C INFO] *** Simulated interrupt: input report ready ***
+
+--------------------------------------------------------------------------------
+4. Test Plugin Script (test-plugin.sh)
+--------------------------------------------------------------------------------
+
+$ sudo ./test-plugin.sh
+
+========================================
+  FWUPD Plugin Virtual Device Test
+========================================
+
+Daemon path: ../vhidi2c-daemon/vhidi2c-daemon
+I2C Bus: 0
+Device Address: 0x2A
+
+[TEST] Checking prerequisites...
+[PASS] Running as root
+[PASS] i2c-dev module loaded
+[PASS] i2c-tools installed
+[PASS] Daemon binary found: ../vhidi2c-daemon/vhidi2c-daemon
+[PASS] All prerequisites met
+
+[TEST] Setting up i2c-stub...
+[PASS] i2c-stub loaded at 0x2A
+[PASS] I2C device /dev/i2c-0 exists
+
+[TEST] Starting vhidi2c-daemon...
+[PASS] Daemon started successfully (PID: 12345)
+
+[TEST] Testing I2C communication...
+[INFO] Reading HID descriptor...
+[INFO] I2C read returned expected behavior for i2c-stub
+[PASS] I2C communication test complete
+
+[TEST] Testing daemon stability (5s)...
+.
+[PASS] Daemon stable for 5s
+
+[TEST] Testing FWUPD plugin integration...
+[INFO] Skipping FWUPD test (fwupd not installed)
+
+========================================
+  Test Summary
+========================================
+Passed: 6
+Failed: 0
+
+All tests passed!
+
+--------------------------------------------------------------------------------
+5. Expected i2cget Output (after daemon running)
+--------------------------------------------------------------------------------
+
+$ sudo i2cget -y 0 0x2A 0x00 w
+0x1e00  ( HID descriptor length = 30, LE )
+
+$ sudo i2cget -y 0 0x2A 0x02 w
+0x0200  ( Input register address )
+
+$ sudo i2cset -y 0 0x2A 0x04 0x01  # Write RESET command to command register
+$ sudo i2cget -y 0 0x2A 0x05 w      # Read from data register (response)
+
+--------------------------------------------------------------------------------
+6. Expected i2cdetect Output
+--------------------------------------------------------------------------------
+
+$ sudo i2cdetect -y 0
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- -- --
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+70: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+Note: i2c-stub addresses show as "--" until accessed by a master.
+The daemon programs the device when it starts.
+
+--------------------------------------------------------------------------------
+7. FWUPD Integration (if FWUPD is installed and device is properly enumerated)
+--------------------------------------------------------------------------------
+
+$ sudo fwupdmgr get-devices
+Futuristic device firmware updater version 1.9.x
+
+Copyright (C) 2026 - Richard Simpson - Keroro Squad
+Keroro 小隊版
+
+Currently no devices.
+
+Or, if a real i2c-hid device driver is bound:
+
+$ sudo fwupdmgr get-devices
+...
+i2c HID Device
+  Device ID:          i2c-12345678
+  Summary:            Virtual HID over I2C device
+  Vendor:             Virtual Vendor
+  Vendor ID:          0x1234
+  Product ID:         0x5678
+  Version:            0.0.1
+  [... more FWUPD output ...]
+
+--------------------------------------------------------------------------------
+8. Error Scenarios
+--------------------------------------------------------------------------------
+
+ERROR: i2c-dev not loaded
+-----------------------------
+[Error] Failed to open I2C bus. Please check:
+  1. i2c-dev kernel module loaded: modprobe i2c-dev
+  2. i2c-stub loaded with address: modprobe i2c-stub chip_addr=0x2A
+  3. Permission to access /dev/i2c-0
+  4. Try running as root or: sudo chmod 666 /dev/i2c-0
+
+ERROR: i2c-stub not loaded
+-----------------------------
+[Error] Failed to set slave address 0x2A: Device or resource busy
+
+ERROR: Address in use
+-----------------------------
+[Error] Failed to set slave address 0x2A: Device or resource busy
+-> Another device is using this address. Unload it first:
+   sudo modprobe -r i2c-stub
+
+ERROR: Permission denied
+-----------------------------
+[Error] Failed to open /dev/i2c-0: Permission denied
+-> Run as root: sudo ./vhidi2c-daemon
+-> Or add user to i2c group: sudo usermod -aG i2c $USER
+
+================================================================================
+End of Expected Output
+================================================================================
