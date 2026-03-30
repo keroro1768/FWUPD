@@ -1,0 +1,94 @@
+# Company I2C HID Plugin Quirks
+#
+# This file defines device-specific configurations for Company HID I2C devices.
+# Each device is matched by DeviceInstanceId or other properties.
+#
+# Format:
+# [device-code]
+# Key = Value
+# Key = Value
+#
+# Reference: elantp.quirk and other fwupd plugin quirks
+
+#======================================================================
+# Generic Company I2C HID Device
+#======================================================================
+
+[company-i2c-hid-generic]
+Plugin = company-i2c-hid
+DeviceInstanceId=HIDRAW\VEN_COMPANY&PID_0001
+DeviceInstanceId=HID\VEN_COMPANY&PID_0001
+Summary = Company I2C HID Device (Generic)
+I2cSlaveAddress=0x2A
+CompanyI2cHidIcType=0x01
+CompanyI2cHidPageCount=0x1000
+CompanyI2cHidBlockSize=64
+CompanyI2cHidIapPassword=0x1234
+QuirkCompanyI2cHidDriver=HID
+QuirkCompanyI2cHidDriver=I2C
+
+#======================================================================
+# Company I2C HID Device with specific module ID
+#======================================================================
+
+[company-i2c-hid-module-0001]
+Plugin = company-i2c-hid
+DeviceInstanceId=HIDRAW\VEN_COMPANY&PID_0001&MOD_0001
+DeviceInstanceId=COMPANY_I2C\ICTYPE_01&MOD_0001
+CompanyI2cHidModuleId=0x0001
+CompanyI2cHidBoardName=module-0001
+I2cSlaveAddress=0x2A
+CompanyI2cHidIapPassword=0x1234
+
+[company-i2c-hid-module-0002]
+Plugin = company-i2c-hid
+DeviceInstanceId=HIDRAW\VEN_COMPANY&PID_0001&MOD_0002
+DeviceInstanceId=COMPANY_I2C\ICTYPE_01&MOD_0002
+CompanyI2cHidModuleId=0x0002
+CompanyI2cHidBoardName=module-0002
+I2cSlaveAddress=0x2B
+CompanyI2cHidIapPassword=0x5678
+
+#======================================================================
+# Company I2C HID Device with IC type matching
+#======================================================================
+
+[company-i2c-hid-ic-01]
+Plugin = company-i2c-hid
+DeviceInstanceId=COMPANY_I2C\ICTYPE_01
+CompanyI2cHidIcType=0x01
+CompanyI2cHidPageCount=0x1000
+CompanyI2cHidBlockSize=64
+QuirkCompanyI2cHidDriver=HID
+QuirkCompanyI2cHidDriver=I2C
+
+[company-i2c-hid-ic-02]
+Plugin = company-i2c-hid
+DeviceInstanceId=COMPANY_I2C\ICTYPE_02
+CompanyI2cHidIcType=0x02
+CompanyI2cHidPageCount=0x2000
+CompanyI2cHidBlockSize=128
+QuirkCompanyI2cHidDriver=HID
+QuirkCompanyI2cHidDriver=I2C
+
+#======================================================================
+# Company I2C HID Device - HID mode only
+#======================================================================
+
+[company-i2c-hid-hid-only]
+Plugin = company-i2c-hid
+DeviceInstanceId=HIDRAW\VEN_COMPANY&PID_0002
+CompanyI2cHidIcType=0x01
+QuirkCompanyI2cHidDriver=HID
+
+#======================================================================
+# Company I2C HID Device - I2C recovery mode
+#======================================================================
+
+[company-i2c-hid-i2c-recovery]
+Plugin = company-i2c-hid
+DeviceInstanceId=COMPANY_I2C\ICTYPE_01&DRIVER_I2C
+CompanyI2cHidIcType=0x01
+CompanyI2cHidPageCount=0x1000
+I2cSlaveAddress=0x2A
+QuirkCompanyI2cHidDriver=I2C
