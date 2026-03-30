@@ -33,11 +33,4 @@ G_DECLARE_FINAL_TYPE(FuCompanyI2cHidPlugin,
 /* HID Report ID for firmware update commands */
 #define FU_COMPANY_I2C_HID_REPORT_ID_UPDATE 0x01
 
-/* Internal plugin data structure */
-typedef struct {
-  FuPlugin *plugin;
-  gboolean i2c_mode_available;  /* Whether I2C fallback is available */
-  guint8 i2c_slave_addr;        /* I2C slave address from quirk */
-} FuCompanyI2cHidPluginPrivate;
-
 #endif /* FU_COMPANY_I2C_HID_PLUGIN_H */

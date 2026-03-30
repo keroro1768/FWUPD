@@ -23,11 +23,11 @@ typedef enum {
 G_DECLARE_FINAL_TYPE(FuCompanyI2cHidDevice,
                       fu_company_i2c_hid_device,
                       FU, COMPANY_I2C_HID_DEVICE,
-                      FuDevice)
+                      FuHidrawDevice)
 
 /* Device private data */
 struct _FuCompanyI2cHidDevice {
-  FuDevice parent_instance;
+  FuHidrawDevice parent_instance;
   FuCompanyI2cHidDeviceFlags flags;
   guint16 ic_type;             /* IC type identifier */
   guint16 module_id;           /* Module identifier */
@@ -36,11 +36,13 @@ struct _FuCompanyI2cHidDevice {
   guint16 page_count;          /* Flash page count */
   guint16 block_size;          /* Flash block size */
   gchar *board_name;           /* Board name from quirk */
-  gboolean hid_mode_available; /* HID interface available */
-  gboolean i2c_mode_available; /* I2C interface available */
+  guint16 iap_ctrl;            /* IAP control register value */
+  guint8 pattern;              /* Pattern for IC type detection */
 };
 
-/* Quirks keys (following elantp naming convention) */
+#define FU_COMPANY_I2C_HID_DEVICE_PRIVATE_FLAG_NONE 0
+
+/* Quirks keys */
 #define FU_COMPANY_I2C_HID_QUIRK_I2C_ADDR        "CompanyI2cHidI2cAddress"
 #define FU_COMPANY_I2C_HID_QUIRK_IC_TYPE        "CompanyI2cHidIcType"
 #define FU_COMPANY_I2C_HID_QUIRK_MODULE_ID      "CompanyI2cHidModuleId"
@@ -53,5 +55,21 @@ struct _FuCompanyI2cHidDevice {
 /* Driver types for quirk matching */
 #define FU_COMPANY_I2C_HID_DRIVER_HID           "HID"
 #define FU_COMPANY_I2C_HID_DRIVER_I2C           "I2C"
+
+/* Protocol ID */
+#define FU_COMPANY_I2C_HID_PROTOCOL_ID "com.company.i2c-hid"
+
+/* I2C slave address default (can be overridden via quirk) */
+#define FU_COMPANY_I2C_HID_I2C_ADDR_DEFAULT 0x2A
+
+/* HID Report ID for firmware update commands */
+#define FU_COMPANY_I2C_HID_REPORT_ID_UPDATE 0x01
+
+/* Company-specific HID commands */
+#define FU_COMPANY_I2C_HID_CMD_GET_VERSION      0x10
+#define FU_COMPANY_I2C_HID_CMD_IAP              0x20
+#define FU_COMPANY_I2C_HID_CMD_IAP_RESET        0x30
+#define FU_COMPANY_I2C_HID_CMD_GET_HID_ID       0x40
+#define FU_COMPANY_I2C_HID_CMD_IAP_PASSWORD     0x50
 
 #endif /* FU_COMPANY_I2C_HID_DEVICE_H */
