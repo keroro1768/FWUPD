@@ -49,6 +49,23 @@
 
 ---
 
+### F002 — FWUPD Plugin 開發實作
+
+**狀態：** 🔄 進行中
+**起始：** 2026-03-30
+**負責：** 🐱 Giroro
+**目標：** 實作完整的 FWUPD Plugin（company-i2c-hid）
+
+**產出位置：** `plugin/company-i2c-hid/`
+
+**進度：**
+- [x] Task.md 建立
+- [ ] Plugin 原始碼實作
+- [ ] Dororo 驗證
+- [ ] Commit + Push
+
+---
+
 ## Enhancement Backlog
 
  Enhancement 提案存放於 `tasks/enhancement/` 目錄。
@@ -60,6 +77,7 @@
 | 任務 | 狀態 | 優先 | 負責 |
 |------|------|------|------|
 | F001 | ✅ Finish | - | Kururu/Dororo |
+| F002 | 🔄 進行中 | P0 | Giroro |
 
 ---
 
