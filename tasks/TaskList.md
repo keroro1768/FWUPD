@@ -51,7 +51,7 @@
 
 ### F002 — FWUPD Plugin 開發實作
 
-**狀態：** 🔄 進行中（待修復 Critical 問題）
+**狀態：** ✅ Finish（2026-03-30 Dororo 驗證通過）
 **起始：** 2026-03-30
 **負責：** 🐱 Giroro
 **目標：** 實作完整的 FWUPD Plugin（company-i2c-hid）
@@ -62,17 +62,19 @@
 - [x] Task.md 建立
 - [x] Plugin 原始碼實作（Giroro）
 - [x] Dororo 驗證（發現 Critical/High 問題）
-- [ ] 修正 Critical 問題
-- [ ] 重新驗證
-- [ ] Commit + Push
+- [x] 修正 Critical 問題（commit `a094229`）
+- [x] 重新驗證（commit `496c685` - ✅ PASS）
+- [x] Commit + Push
 
-**Dororo 驗證發現的問題（P0/P1）：**
-| 優先 | 問題 | 狀態 |
+**驗證結果（Dororo 2026-03-30）：**
+| 優先 | 項目 | 狀態 |
 |------|------|------|
-| P0 | HID 通信未實作 | ⚠️ 待修復 |
-| P0 | Plugin 缺少 udev 子系統註冊 | ⚠️ 待修復 |
-| P1 | Device 基類選擇錯誤 | ⚠️ 待修復 |
-| P1 | Device 生命週期鉤子位置錯誤 | ⚠️ 待修復 |
+| P0 | HID 通信完整實作 | ✅ PASS |
+| P0 | udev 子系統註冊 | ✅ PASS |
+| P1 | Device 基類改為 FU_TYPE_HIDRAW_DEVICE | ✅ PASS |
+| P1 | 生命週期鉤子在 FuDeviceClass | ✅ PASS |
+
+**所有 P0/P1 問題已修復。Plugin 通過驗證。**
 
 ---
 
@@ -87,7 +89,7 @@
 | 任務 | 狀態 | 優先 | 負責 |
 |------|------|------|------|
 | F001 | ✅ Finish | - | Kururu/Dororo |
-| F002 | 🔄 進行中 | P0 | Giroro |
+| F002 | ✅ Finish | P0 | Giroro/Dororo |
 
 ---
 
@@ -109,9 +111,10 @@
 | 1 | F001 I2C HID 研究 | ✅ 已完成 | - |
 | 2 | F001 Review | ✅ 已完成 | Dororo 已驗證 |
 
-### 下一階段（待 Karoro 指派）
+### 下一階段（待 Keroro 指派）
 
 | 順序 | 任務 | 說明 |
 |------|------|------|
-| - | F002 Plugin 開發實作 | 根據 F001 研究結果，開發實際的 FWUPD Plugin |
-| - | F003 LVFS 帳號申請 | 申請vendor帳號，准備上線 |
+| ✅ | F001 研究 | 已完成 |
+| ✅ | F002 Plugin 實作 | 已完成（Dororo 驗證通過）|
+| ⏳ | F003 LVFS 帳號申請 | 申請 vendor 帳號，準備上線 |
